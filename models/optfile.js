@@ -23,7 +23,7 @@ module.exports={
 				console.log(err);
 				return;
 			}else{
-				console.log("输出文件");
+				console.log("LOG:readImg");
 					//res.writeHead(200,  {'Content-Type':'image/jpeg'});
 					res.write(file,'binary');
 					res.end();
