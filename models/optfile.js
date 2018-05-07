@@ -1,14 +1,15 @@
 var  fs=  require('fs');
 module.exports={
-  readfile:function(path){    //异步执行
+  readfile:function(path,recall){    //异步执行
     fs.readFile(path,  function  (err,  data)  {
     if  (err)  {
       console.log(err);
     }else{
       console.log(data.toString());
+	  recall(data);
     }
     });
-    console.log("异步方法执行完毕");
+    console.log("异步[读文件]方法执行完毕");
   },
   readfileSync:function(path){  //同步读取
     var  data  =  fs.readFileSync(path,'utf-8');
@@ -16,6 +17,20 @@ module.exports={
     console.log("同步方法执行完毕");
     return  data;      
   },
+	readImg:function(path,res){
+		fs.readFile(path,'binary',function(err,  file)  {
+			if  (err)  {
+				console.log(err);
+				return;
+			}else{
+				console.log("输出文件");
+					//res.writeHead(200,  {'Content-Type':'image/jpeg'});
+					res.write(file,'binary');
+					res.end();
+			}
+		});
+	},
+  //写
    writefile:function(path,data){    //异步方式
         fs.writeFile(path,  data,  function  (err)  {
             if  (err)  {
