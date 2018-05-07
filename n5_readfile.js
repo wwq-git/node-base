@@ -6,7 +6,8 @@ http.createServer(function  (request,  response)  {
   console.log('访问');
   response.write('hello,world');
   //optfile.readfile("G:\\www\\nodejs\\one\\models\\aa.txt");
-  optfile.readfileSync("./testReadFile.txt");
+  var data = optfile.readfileSync("./testReadFile.txt");
+  optfile.writefile('./writeFile.txt',data);
   response.end('hell,世界');//不写则没有http协议尾
  }
 }).listen(8000);
