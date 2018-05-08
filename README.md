@@ -40,7 +40,11 @@ async.series({
 > npm install mysql -g 
 > cnpm install mysql -g
 
-2.建表
+2.安装node.js的mysqlpool模块  
+> cnpm install -g node-mysql   //-g表全局  
+> npm install -g node-mysql   //-g表全局  
+
+3.建表
 ```
 create table user(  
 uid int not null primary key auto_increment,  
