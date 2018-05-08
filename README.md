@@ -34,3 +34,18 @@ async.series({
     console.log(results);     
 }); 
 ```
+## 连接MySQL
+1.安装mysql支持 
+
+> npm install mysql -g 
+> cnpm install mysql -g
+
+2.建表
+```
+create table user(  
+uid int not null primary key auto_increment,  
+uname varchar(100) not null,  
+pwd varchar(100) not null   
+)ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+```
+  
