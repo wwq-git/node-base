@@ -67,7 +67,6 @@ function getSingerJSONPinfo(path){
 }
 
 function getWeb(singerName){
-//https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&searchid=48639460979987986&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=20&w=%E9%99%88%E7%B2%92&g_tk=5381&jsonpCallback=MusicJsonCallback6657007726461985&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0
 	var webUrl='http://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&searchid=48639460979987986&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=20&w='+encodeURI(singerName)+'&g_tk=5381&jsonpCallback=MusicJsonCallback6657007726461985&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0';
 	http.get(webUrl,function(req,res){  
 		var html='';  
@@ -107,8 +106,8 @@ function getWeb(singerName){
 
 function getImage(url,singerName){
 	var picSuffix = url.substring(url.lastIndexOf('\.'));
-	var obj = path.parse(url);
-	var filename=obj.base;
+	// var obj = path.parse(url);
+	// var filename=obj.base;
 	var writeStream = fs.createWriteStream('./pic/'+cn2pinyin(singerName)+singerName+picSuffix);
 	
 	http.get(url,function(res){
