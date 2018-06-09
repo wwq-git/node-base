@@ -17,6 +17,54 @@ function cn2pinyin(cn){
 	return res +'-';
 }
 
+function buildPicUrl(html){
+	var jsondata= html.substring(html.indexOf('(')+1, html.length-1);
+	//console.log(jsondata);
+	if(JSON.parse(jsondata).code != 0||JSON.parse(jsondata).subcode != 0){
+		logErr(singerName);
+		return;
+	}
+	var url = '';
+	try {
+		url = JSON.parse(jsondata).data.zhida.zhida_singer.singerPic;
+	} catch (err) {
+		logErr(singerName);
+	}
+	return url;
+}
+
+function getSingerJSONPinfo(path){
+	var options = {
+	  host: 'c.y.qq.com',
+	  port: 80,
+	  method: 'GET',
+	  path:path,
+	  timeout:30000
+	};
+
+	var resultData='';
+	var req = http.request(options, function(res) {
+	  //console.log('STATUS: ' + res.statusCode);
+	  //console.log('HEADERS: ' + JSON.stringify(res.headers));
+	  res.on('data', function (chunk) {
+		resultData += chunk;
+		//console.log('BODY: ' + chunk); 
+	  });
+	});
+
+	req.on('end',function(){ 
+		  console.log(resultData);
+	});
+	req.on('error',function(e){
+		console.log("error got :"+e.message);
+	}).on('timeout',function(e){
+
+		console.log('timeout got :'+e.message);
+	});
+
+	req.end();
+	return resultData;
+}
 
 function getWeb(singerName){
 //https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&searchid=48639460979987986&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=20&w=%E9%99%88%E7%B2%92&g_tk=5381&jsonpCallback=MusicJsonCallback6657007726461985&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0
@@ -46,8 +94,7 @@ function getWeb(singerName){
 				//process.exit(0);
 				return ;
 			}
-			var picSuffix = url.substring(url.lastIndexOf('\.'));
-			//getImage(url,singerName,picSuffix);
+			//getImage(url,singerName);
 		});
 		req.on("error",function(err){
 			console.log("err -----> "+err.message);
@@ -58,7 +105,8 @@ function getWeb(singerName){
 	});  
 }
 
-function getImage(url,singerName,picSuffix){
+function getImage(url,singerName){
+	var picSuffix = url.substring(url.lastIndexOf('\.'));
 	var obj = path.parse(url);
 	var filename=obj.base;
 	var writeStream = fs.createWriteStream('./pic/'+cn2pinyin(singerName)+singerName+picSuffix);
@@ -79,7 +127,10 @@ antReadline.on('line', (line) => {
     //console.log(  i + "  ======> " + line);
 	if(line.length > 0){
 		try {
-			getWeb(line);
+			//getWeb(line);
+			var path ='http://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&searchid=48639460979987986&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=20&w='+encodeURI(line)+'&g_tk=5381&jsonpCallback=MusicJsonCallback6657007726461985&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0';
+			var singerInfo = getSingerJSONPinfo(path);
+			//console.log(singerInfo);
 		} catch (err) {
 			console.log(err);
 			console.log(line);
