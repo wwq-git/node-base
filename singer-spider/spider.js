@@ -93,7 +93,7 @@ function getWeb(singerName){
 				//process.exit(0);
 				return ;
 			}
-			//getImage(url,singerName);
+			getImage(url,singerName);
 		});
 		req.on("error",function(err){
 			console.log("err -----> "+err.message);
@@ -113,7 +113,20 @@ function getImage(url,singerName){
 	http.get(url,function(res){
 		res.pipe(writeStream);
 		console.log(filename+ '----->'+singerName +' ---->  读取完毕');
+		okFlag = singerName;
 	});
+}
+
+function doSometing(line){
+	getWeb(line);
+	var t1 = process.uptime();
+	var t2 = t1;
+	while ( okFlag != line){
+		t2 = process.uptime();
+		if((t2-t1)%1000 == 0){
+			console.log(t2-t1);
+		}
+	}
 }
 
 var antReadline = readline.createInterface({
@@ -122,13 +135,15 @@ var antReadline = readline.createInterface({
 
 var i = 1;
 var err ='';
+var okFlag = '';
 antReadline.on('line', (line) => {
-    //console.log(  i + "  ======> " + line);
+    console.log(  i + "  ======> " + line);
 	if(line.length > 0){
 		try {
+			doSometing();
 			//getWeb(line);
-			var path ='http://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&searchid=48639460979987986&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=20&w='+encodeURI(line)+'&g_tk=5381&jsonpCallback=MusicJsonCallback6657007726461985&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0';
-			var singerInfo = getSingerJSONPinfo(path);
+			//var path ='http://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&searchid=48639460979987986&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n=20&w='+encodeURI(line)+'&g_tk=5381&jsonpCallback=MusicJsonCallback6657007726461985&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0';
+			//var singerInfo = getSingerJSONPinfo(path);
 			//console.log(singerInfo);
 		} catch (err) {
 			console.log(err);
